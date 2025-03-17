@@ -36,18 +36,18 @@ def test_fetch_success(scraper):
     fake_html = "<html><body><p>Test Paragraph</p></body></html>"
     fake_response = FakeResponse(fake_html, 200)
     scraper.session = DummySession(fake_response)
-    html = scraper.fetch("http://example.com")
+    html = scraper.fetch("https://www.bbc.com/news")
     assert html == fake_html
 
 def test_fetch_failure(scraper):
     fake_response = FakeResponse("Not Found", 404)
     scraper.session = DummySession(fake_response)
     with pytest.raises(Exception):
-        scraper.fetch("http://example.com")
+        scraper.fetch("https://www.bbc.com/news")
 
 def test_scrape(scraper):
     fake_html = "<html><body><p>Test Paragraph</p></body></html>"
     fake_response = FakeResponse(fake_html, 200)
     scraper.session = DummySession(fake_response)
-    text = scraper.scrape("http://example.com")
+    text = scraper.scrape("https://www.bbc.com/news")
     assert text == "Test Paragraph"
