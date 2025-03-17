@@ -42,7 +42,8 @@ class WebScrapper:
         """
         Parse HTML files
         """
-        return BeautifulSoup(html, 'html.parser')
+        return BeautifulSoup(html, 'lxml')
+
     
     def extract_text(self, soup):
         """
@@ -59,3 +60,21 @@ class WebScrapper:
         html = self.fetch(url)
         soup = self.parse(html)
         return self.extract_text(soup)
+    
+if __name__ == '__main__':
+    urls = [
+        'https://en.wikipedia.org/wiki/Machine_learning',
+        'https://www.bbc.com/news',
+        'https://medium.com/'
+    ]
+
+    scrapper = WebScrapper
+    articles = {}
+
+    for url in urls:
+        try:
+            content = scrapper.scrape(url)
+            articles[url] = content
+            logger.info(f"Successfully scraped content from: {url}")
+        except Exception as e:
+            logger.error(f"Error scraping {url}: {e}")
