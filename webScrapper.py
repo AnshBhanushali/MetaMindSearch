@@ -25,4 +25,37 @@ class WebScrapper:
         self.session.mount('http://', adapter)
         self.session.mount('https://', adapter)
         self.timeout = timeout
-        
+
+    def fetch(self, url):
+        """
+        Fetch url content from the given URL
+        """
+        try:
+            response = self.session.get(url, timeout=self.timeout)
+            response.raise_for_status()
+            return response.text
+        except requests.RequestException as e:
+            logger.error(f"Request failed for {url}: {e}")
+            raise
+    
+    def parse(self, html):
+        """
+        Parse HTML files
+        """
+        return BeautifulSoup(html, 'html.parser')
+    
+    def extract_text(self, soup):
+        """
+        Extract and clean text from bs4 object
+        """
+        paragraphs = soup.find_all('p')
+        text = "\n".join(p.get_text().strip() for p in paragraphs if p.get_text().strip())
+        return text
+    
+    def scrape(self, url):
+        """
+        Complete pipeline for above functions
+        """
+        html = self.fetch(url)
+        soup = self.parse(html)
+        return self.extract_text(soup)
