@@ -23,3 +23,21 @@ def get_youtube_transcript(video_id, languages=['en']):
     except Exception as e:
         logger.error(f"Error fetching transcript for video {video_id}: {e}")
     return None
+
+def main():
+    video_ids = ['dQw4w9WgXcQ', 'anotherVideoId']
+    youtube_transcripts = {}
+
+    for vid in video_ids:
+        transcript = get_youtube_transcript(vid)
+        if transcript:
+            youtube_transcripts[vid] = transcript
+            logger.info(f"Successfully fetched transcript for video ID: {vid}")
+        else:
+            logger.warning(f"Could not fetch transcript for video ID: {vid}")
+
+    for vid, text in youtube_transcripts.items():
+        logger.debug(f"Transcript for {vid}: {text[:100]}...")
+
+if __name__ == '__main__':
+    main()
