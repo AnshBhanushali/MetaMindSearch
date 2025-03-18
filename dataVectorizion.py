@@ -31,12 +31,6 @@ class FaissVectorIndex:
     def build_index(self, documents):
         """
         Computes embeddings for a list of documents and builds a FAISS index.
-        
-        Parameters:
-            documents (list of str): The documents to index.
-            
-        Returns:
-            faiss.IndexFlatL2: The built FAISS index.
         """
         if not documents:
             raise ValueError("The documents list is empty. Cannot build an index.")
@@ -59,14 +53,6 @@ class FaissVectorIndex:
     def search(self, query, top_k=5, clean_text_func=None):
         """
         Searches the FAISS index for documents similar to the query.
-        
-        Parameters:
-            query (str): The search query.
-            top_k (int): Number of nearest neighbors to retrieve.
-            clean_text_func (callable, optional): A function to clean the query text.
-            
-        Returns:
-            tuple: (distances, indices) arrays from FAISS.
         """
         if self.index is None:
             raise ValueError("Index has not been built. Call build_index(documents) first.")
@@ -87,7 +73,6 @@ class FaissVectorIndex:
             logger.error("Search failed: %s", e)
             raise
 
-# Example production-level text cleaning function (can be enhanced further)
 def clean_text(text):
     import re, string
     # Lowercase the text
