@@ -4,7 +4,7 @@ import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+from requests.packages.urllib3.util.retry import Retry
 
 # Configure logging
 logging.basicConfig(
@@ -92,3 +92,16 @@ def scrape_images(url, download_folder='downloaded_images'):
         if result:
             downloaded_files.append(result)
     return downloaded_files
+
+if __name__ == '__main__':
+    # Ask the user for the URL containing images.
+    image_page_url = input("Enter the URL of the page to scrape images from: ").strip()
+    
+    if not image_page_url:
+        logger.error("No URL provided. Exiting.")
+    else:
+        try:
+            downloaded_images = scrape_images(image_page_url)
+            logger.info(f"Downloaded {len(downloaded_images)} images.")
+        except Exception as e:
+            logger.error(f"Scraping failed: {e}")
