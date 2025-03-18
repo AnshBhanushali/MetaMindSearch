@@ -9,3 +9,17 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
+
+def get_youtube_transcript(video_id, languages=['en']):
+    """
+    Fetches the transcript for a given YouTube video ID.
+    """
+    try:
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
+        transcript_text = " ".join(segment['text'] for segment in transcript_list)
+        return transcript_text
+    except (TranscriptsDisabled, VideoUnavailable, NoTranscriptFound) as e:
+        logger.error(f"Transcript not available for video {video_id}: {e}")
+    except Exception as e:
+        logger.error(f"Error fetching transcript for video {video_id}: {e}")
+    return None
