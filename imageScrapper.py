@@ -4,7 +4,7 @@ import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util.retry import Retry
 
 # Configure logging
 logging.basicConfig(
