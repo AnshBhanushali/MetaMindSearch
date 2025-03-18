@@ -29,3 +29,45 @@ def load_spacy_model(model_name="en_core_web_sm"):
 
 # Load the spaCy model (this can be done once at the start)
 nlp = load_spacy_model()
+
+def clean_text_advanced(text, remove_stopwords=True, lemmatize=True):
+    """
+    Performs advanced text cleaning using regular expressions and spaCy.
+    
+    Parameters:
+        text (str): The text to clean.
+        remove_stopwords (bool): Whether to remove stopwords.
+        lemmatize (bool): Whether to lemmatize tokens.
+        
+    Returns:
+        str: The cleaned text.
+    """
+    if not isinstance(text, str):
+        logger.error("Input text must be a string.")
+        raise ValueError("Input text must be a string.")
+
+    text = text.lower()
+    # Remove URLs
+    text = re.sub(r'http\S+|www\S+', '', text)
+    # Remove HTML tags
+    text = re.sub(r'<.*?>', '', text)
+    # Remove punctuation
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    # Remove extra whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    
+    # Use spaCy to process text (tokenization, lemmatization, etc.)
+    doc = nlp(text)
+    tokens = []
+    for token in doc:
+        # Optionally skip stopwords and non-alphanumeric tokens
+        if remove_stopwords and token.text in STOP_WORDS:
+            continue
+        if token.is_space or token.is_punct:
+            continue
+        # Choose lemma or original form
+        token_text = token.lemma_ if lemmatize else token.text
+        tokens.append(token_text)
+    
+    cleaned_text = " ".join(tokens)
+    return cleaned_text
